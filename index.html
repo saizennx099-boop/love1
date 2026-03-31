@@ -14,7 +14,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
     font-family: 'Segoe UI', sans-serif;
     color: white;
 }
@@ -25,22 +25,22 @@ body {
 }
 
 h1 {
-    font-size: 48px;
-    margin-bottom: 20px;
+    font-size: 52px;
+    margin-bottom: 10px;
     animation: fadeIn 2s ease;
 }
 
 p {
-    font-size: 18px;
-    opacity: 0.8;
+    font-size: 20px;
+    opacity: 0.85;
 }
 
 button {
-    padding: 15px 30px;
+    padding: 15px 35px;
     font-size: 18px;
     margin: 15px;
     border: none;
-    border-radius: 15px;
+    border-radius: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
@@ -48,17 +48,23 @@ button {
 #yes {
     background: linear-gradient(45deg, #00ffcc, #00ff88);
     color: black;
-    box-shadow: 0 0 20px rgba(0,255,200,0.5);
+    box-shadow: 0 0 25px rgba(0,255,200,0.7);
 }
 
 #yes:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
 }
 
 #no {
     background: linear-gradient(45deg, #ff4d4d, #ff0000);
     color: white;
     position: absolute;
+}
+
+.gif {
+    width: 180px;
+    border-radius: 15px;
+    margin-bottom: 15px;
 }
 
 .heart {
@@ -80,29 +86,22 @@ button {
     border-radius: 50%;
 }
 
-.heart::before {
-    top: -10px;
-    left: 0;
-}
-
-.heart::after {
-    left: -10px;
-    top: 0;
-}
+.heart::before { top: -10px; }
+.heart::after { left: -10px; }
 
 @keyframes float {
     0% { transform: translateY(0) rotate(45deg); opacity: 1; }
-    100% { transform: translateY(-800px) rotate(45deg); opacity: 0; }
+    100% { transform: translateY(-900px) rotate(45deg); opacity: 0; }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
 .final {
-    font-size: 40px;
-    animation: fadeIn 2s ease;
+    font-size: 42px;
+    text-align: center;
 }
 
 </style>
@@ -110,27 +109,47 @@ button {
 
 <body>
 
+<!-- MÜZİK -->
+<audio autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
+
 <div class="container" id="main">
+
+    <!-- GİF -->
+    <img class="gif" src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+
     <h1>Benimle çıkar mısın? ❤️</h1>
-    <p>Bu site sadece senin için yapıldı...</p>
+    <p>Bu site sadece senin için yapıldı... ve evet demen için tasarlandı 😌</p>
 
     <button id="yes">Evet 💖</button>
     <button id="no">Hayır 💔</button>
 </div>
 
 <script>
-// Kaçan buton
 const noBtn = document.getElementById("no");
+let scale = 1;
+
+// Kaçan + küçülen hayır butonu
 noBtn.addEventListener("mouseover", () => {
     noBtn.style.top = Math.random() * 80 + "%";
     noBtn.style.left = Math.random() * 80 + "%";
+
+    scale -= 0.1;
+    if(scale > 0.3){
+        noBtn.style.transform = `scale(${scale})`;
+    }
 });
 
-// Evet tıklanınca
+// EVET BUTONU
 const yesBtn = document.getElementById("yes");
 yesBtn.onclick = () => {
     document.body.innerHTML = `
-        <div class="final">Seni seviyorum ❤️<br><br>Artık resmen birliktesin 😌</div>
+        <div class="final">
+        <img class="gif" src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif"><br>
+        SENİ SEVİYORUM ❤️<br><br>
+        Artık resmen birliktesin 😌
+        </div>
     `;
     startHearts();
 };
@@ -143,13 +162,11 @@ function createHeart() {
     heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
     document.body.appendChild(heart);
 
-    setTimeout(() => {
-        heart.remove();
-    }, 6000);
+    setTimeout(() => heart.remove(), 6000);
 }
 
 function startHearts() {
-    setInterval(createHeart, 200);
+    setInterval(createHeart, 150);
 }
 </script>
 
