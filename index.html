@@ -6,82 +6,167 @@
 <title>Meryem ❤️</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap');
+
 body{
 margin:0;
 height:100vh;
+overflow:hidden;
+font-family:'Poppins',sans-serif;
+background:black;
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
-background:linear-gradient(135deg,#0a0000,#2b0000,#000);
-font-family:Arial;
-color:white;
-overflow:hidden;
 text-align:center;
 }
 
-/* container */
-.container{
-width:90%;
-max-width:400px;
-padding:30px;
-border-radius:20px;
-background:rgba(255,0,50,0.1);
-backdrop-filter:blur(15px);
-box-shadow:0 0 40px red;
+/* BACKGROUND STARS */
+body::before{
+content:"";
+position:absolute;
+width:200%;
+height:200%;
+background:url("https://www.transparenttextures.com/patterns/stardust.png");
+opacity:0.25;
+animation:move 60s linear infinite;
+}
+@keyframes move{
+from{transform:translateY(0);}
+to{transform:translateY(-1000px);}
 }
 
-/* text */
-h1{font-size:20px;}
-h2{font-size:18px; margin-top:10px;}
+/* INTRO */
+#intro{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+animation:fadeOut 5s forwards;
+animation-delay:4s;
+}
 
-/* buttons */
+.name{
+font-size:38px;
+font-weight:800;
+color:#ff0033;
+text-shadow:0 0 30px #ff0033;
+animation:heartbeat 1.3s infinite;
+}
+
+@keyframes heartbeat{
+0%{transform:scale(1);}
+25%{transform:scale(1.1);}
+50%{transform:scale(1);}
+75%{transform:scale(1.15);}
+100%{transform:scale(1);}
+}
+
+@keyframes fadeOut{
+to{opacity:0; visibility:hidden;}
+}
+
+/* MAIN */
+.container{
+display:none;
+width:90%;
+max-width:420px;
+padding:35px;
+border-radius:25px;
+background:rgba(255,0,50,0.08);
+backdrop-filter:blur(20px);
+box-shadow:0 0 50px rgba(255,0,50,0.4);
+animation:zoomIn 1.5s ease forwards;
+}
+
+@keyframes zoomIn{
+from{opacity:0; transform:scale(0.7);}
+to{opacity:1; transform:scale(1);}
+}
+
+h1{
+font-size:20px;
+opacity:0;
+animation:fadeText 2s forwards;
+animation-delay:1s;
+}
+
+h2{
+font-size:18px;
+margin-top:15px;
+opacity:0;
+animation:fadeText 2s forwards;
+animation-delay:2.2s;
+}
+
+@keyframes fadeText{
+to{opacity:1;}
+}
+
+/* BUTTONS */
 .buttons{
 margin-top:30px;
 position:relative;
-height:120px;
+height:80px;
+opacity:0;
+animation:fadeText 2s forwards;
+animation-delay:3.5s;
 }
 
 button{
-padding:12px 20px;
+width:120px;
+padding:12px;
 border:none;
 border-radius:30px;
-font-size:16px;
+font-size:15px;
 cursor:pointer;
 position:absolute;
-transition:0.2s;
 }
 
-/* YES (büyüyen) */
 .yes{
 left:15%;
-background:#ff0033;
+background:linear-gradient(45deg,#ff0033,#990000);
 color:white;
-box-shadow:0 0 20px red;
-transform:scale(1);
+box-shadow:0 0 20px #ff0033;
 }
 
-/* NO (kaçan + kilitli) */
 .no{
 right:15%;
 background:#220000;
 color:white;
-cursor:not-allowed;
-opacity:0.8;
 }
 
 /* RESULT */
 .result{
 display:none;
 margin-top:20px;
+animation:fadeIn 2s forwards;
 }
 
 .result img{
 width:80%;
+max-width:260px;
 margin-top:20px;
 border-radius:15px;
+box-shadow:0 0 40px red;
+animation:float 3s ease-in-out infinite;
 }
 
-/* HEART */
+@keyframes float{
+0%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
+100%{transform:translateY(0);}
+}
+
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
+}
+
+/* HEARTS */
 .heart{
 position:fixed;
 font-size:20px;
@@ -97,13 +182,21 @@ to{transform:translateY(-10vh); opacity:0;}
 
 <body>
 
-<div class="container">
+<!-- INTRO -->
+<div id="intro">
+<div>Bu site sadece</div>
+<div class="name">❤️ Meryem ❤️</div>
+<div>için yapıldı...</div>
+</div>
+
+<!-- MAIN -->
+<div class="container" id="main">
 <h1>Sana bir şey sormak istiyorum...</h1>
 <h2>Benimle çıkar mısın? ❤️</h2>
 
 <div class="buttons">
-<button class="yes" id="yesBtn" onclick="acceptLove()">Evet ❤️</button>
-<button class="no" id="noBtn" disabled>Hayır</button>
+<button class="yes" onclick="acceptLove()">Evet ❤️</button>
+<button class="no" id="noBtn">Hayır</button>
 </div>
 
 <div class="result" id="result">
@@ -118,38 +211,21 @@ to{transform:translateY(-10vh); opacity:0;}
 
 <script>
 
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
+/* intro sonrası */
+setTimeout(()=>{
+document.getElementById("main").style.display="block";
+},5000);
 
-let scale = 1;
-
-/* hayır kaçınca evet büyür */
+/* hayır kaçma */
+const noBtn=document.getElementById("noBtn");
 function moveButton(){
-    noBtn.style.top = Math.random()*200 + "px";
-    noBtn.style.left = Math.random()*200 + "px";
-
-    scale += 0.15;
-    yesBtn.style.transform = "scale(" + scale + ")";
+noBtn.style.top=Math.random()*300+"px";
+noBtn.style.left=Math.random()*200+"px";
 }
-
-/* mouse yaklaşınca */
-document.addEventListener("mousemove",(e)=>{
-    const rect = noBtn.getBoundingClientRect();
-
-    const distance = Math.hypot(
-        e.clientX - (rect.left + rect.width/2),
-        e.clientY - (rect.top + rect.height/2)
-    );
-
-    if(distance < 120){
-        moveButton();
-    }
-});
-
-/* mobil */
+noBtn.addEventListener("mouseover",moveButton);
 noBtn.addEventListener("touchstart",moveButton);
 
-/* kalp efekti */
+/* kalpler */
 function createHeart(){
 const h=document.createElement("div");
 h.className="heart";
@@ -165,16 +241,26 @@ function acceptLove(){
 document.querySelector(".buttons").style.display="none";
 document.getElementById("result").style.display="block";
 
-/* müzik */
+/* müzik yumuşak başlasın */
 const music=document.getElementById("music");
+music.volume=0;
 music.play();
 
-/* kalpler */
-for(let i=0;i<50;i++){
-setTimeout(createHeart,i*60);
+let v=0;
+let fade=setInterval(()=>{
+if(v<1){
+v+=0.05;
+music.volume=v;
+}else{
+clearInterval(fade);
 }
-}
+},200);
 
+/* kalp patlaması */
+for(let i=0;i<60;i++){
+setTimeout(createHeart,i*50);
+}
+}
 </script>
 
 </body>
